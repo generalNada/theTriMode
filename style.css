@@ -848,6 +848,9 @@ h4 {
   user-select: none;
   -webkit-user-select: none;
   z-index: 10;
+  font-size: 4rem;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
 }
 
 .color-block.dragging {
@@ -1175,6 +1178,7 @@ h4 {
     width: 70px !important; /* ~58% of 120px */
     height: 70px !important;
     border-width: 3px !important;
+    font-size: 2.32rem !important; /* ~58% of 4rem */
   }
 
   /* Scale down color labels for tablets */
@@ -1218,6 +1222,7 @@ h4 {
     width: 70px !important;
     height: 70px !important;
     border-width: 3px !important;
+    font-size: 2.32rem !important;
   }
   .color-label {
     font-size: 1.75rem !important;
@@ -1277,6 +1282,7 @@ h4 {
     width: 70px !important;
     height: 70px !important;
     border-width: 3px !important;
+    font-size: 2.32rem !important;
   }
   body .color-label {
     font-size: 1.75rem !important;
