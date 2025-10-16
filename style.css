@@ -1224,6 +1224,17 @@ h4 {
     padding: 5px 12px !important;
     border-width: 2px !important;
   }
+  .number-container {
+    width: 70px !important;
+    height: 70px !important;
+    border-width: 3px !important;
+    font-size: 2.32rem !important;
+  }
+  .number-label {
+    font-size: 1.75rem !important;
+    padding: 5px 12px !important;
+    border-width: 2px !important;
+  }
   /* Scale down floating messages */
   .match-message {
     font-size: 0.85rem !important;
