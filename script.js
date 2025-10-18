@@ -28,69 +28,70 @@ class LetterExplosion {
     this.customMatchMessages = {
       planet: [
         "Outta This World!",
-        "Planetary Perfection Achieved!",
-        "You just orbited a match!",
-        "There IS Life On Mars!!",
+        "Planetary Perfection",
+        "Sweet Orbit!",
+        "Life On Mars!!",
       ],
       dog: [
         "A Barking Success!",
         "Ruff Ruff!",
         "Good Doggy!",
         "Woof Woof!",
-        "Doggone Good Match!",
+        "Doggone Nice!",
       ],
       moon: [
-        "You've phased into success!",
+        "Success Phased!",
         "Lunar Luck!",
         "Moonstruck!",
         "Full Moon Fever!",
       ],
       sun: [
-        "Blazing hot match!",
-        "You've lit up the game!",
-        "Solar flare of victory!",
+        "Blazing Hot!",
+        "Very Bright!",
+        "Solar Flares!",
         "Sunny Side Up!!",
-        "Sun Match!",
+        "Blind With Envy!",
       ],
       sparkle: [
-        "That was dazzling!",
-        "Sparkle success!",
-        "Shining match superstar!",
-        "Starstruck Match!",
-        "My Shades Please!",
+        "Dazzling!",
+        "Sparkly Work!",
+        "Shining Superstar!",
+        "Starstruck!",
+        "Where Be My Shades!",
       ],
       rocket: [
-        "You've launched the perfect match!",
+        "Perfect Launch!",
         "Mission Accomplished!",
-        "That match was stellar speed!",
+        "Stellar Speed!",
         "Climb Aboard!!!",
       ],
       clown: [
-        "You matched like a true trickster!",
-        "A laughably good match!",
-        "That was circus-level sharp!",
+        "True Trickster!",
+        "You Don't Clown Around!",
+        "Goofy But Great!",
         "Join The Circus!!",
       ],
       alien: [
-        "Out of this galaxy match!",
-        "Abducted a perfect pair!",
-        "You've got alien instincts!",
+        "Good Alien!",
+        "For My People!",
+        "Alien Instincts!",
+        "Alien InsIndependence!",
       ],
       fish: [
         "You reeled that one in!",
         "Swimming in success!",
-        "That was a fin-tastic match!",
+        "That was  Fin-tastic!",
         "You're Gilling This!!",
       ],
       octopus: [
         "Eight arms, infinite skills!",
-        "You wrapped that up tight!",
-        "Octo-match complete!",
-        "Over the top!!",
+        "Wrapped tight!",
+        "Nice Grab!",
+        "Tentacle Triumph!!",
       ],
       giraffe: [
         "Neck and neck!",
-        "Tall win champ!",
+        "Tall win!",
         "Sky-high score!",
         "You stand tall!",
         "Towering success!",
@@ -119,7 +120,7 @@ class LetterExplosion {
     // Custom messages for color matches
     this.colorMatchMessages = {
       red: [
-        "Red Hot Match!",
+        "Red Hot!",
         "Seeing Red... Success!",
         "Ruby Perfect!",
         "Fire Engine Found!",
@@ -211,7 +212,7 @@ class LetterExplosion {
         "Quarter Pounder Success!",
       ],
       5: [
-        "High Five Match!",
+        "High Five!",
         "Five-Star Rating!",
         "Quintessential Success!",
         "Five Alive!",
@@ -880,6 +881,7 @@ class LetterExplosion {
 
         // Immediately generate new background color based on mode
         this.generateImmediateBackgroundColor();
+        console.log("Well - It's Toggled!!! Dark Mode That Is!!!");
       },
     });
     audioSection.appendChild(darkModeItem);
@@ -914,6 +916,7 @@ class LetterExplosion {
         this.clearAllStardust();
         this.playSound("toggle");
         this.closeMenu(hamburgerButton, menuPanel);
+        console.log("Well - It's Cleared!!! Stardust That Is!!!");
       },
     });
     utilsSection.appendChild(clearStardustItem);
@@ -2684,8 +2687,10 @@ class LetterExplosion {
       const y = centerY + offsetY;
       const size = 2 + Math.random() * 5; // 2-7px
       const twinkleDuration = 1.5 + Math.random() * 2.5; // 1.5-4s twinkle
-      const fadeDelay = 270 + Math.random() * 30; // Start fading after 4.5-5 minutes!
-      const fadeDuration = 5 + Math.random() * 5; // Fade over 5-10s
+      const fadeDelay = 600 + Math.random() * 60; // 10–11 minutes
+      // const fadeDelay = 270 + Math.random() * 30; // Start fading after 4.5-5 minutes!
+      const fadeDuration = 20 + Math.random() * 10; // Fade over 20–30s
+      // const fadeDuration = 5 + Math.random() * 5; // Fade over 5-10s
 
       const starColor =
         colorPalette[Math.floor(Math.random() * colorPalette.length)];
