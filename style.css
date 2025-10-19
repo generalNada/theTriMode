@@ -1803,3 +1803,174 @@ h4 {
     padding: 30px 15px !important;
   }
 }
+
+/* Voice Selection Modal Styles */
+.voice-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.voice-modal-overlay.show {
+  opacity: 1;
+}
+
+.voice-modal {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 20px;
+  padding: 0;
+  max-width: 700px;
+  width: 90%;
+  max-height: 80vh;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  transform: scale(0.8);
+  transition: transform 0.3s ease;
+}
+
+.voice-modal-overlay.show .voice-modal {
+  transform: scale(1);
+}
+
+.voice-modal-header {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 15px 20px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.voice-modal-close {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 2rem;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease;
+}
+
+.voice-modal-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.voice-modal-content {
+  padding: 20px;
+  max-height: calc(80vh - 80px);
+  overflow-y: auto;
+}
+
+.voice-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 15px;
+}
+
+.voice-option {
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 15px;
+  padding: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.voice-option:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+.voice-option.selected {
+  background: rgba(78, 205, 196, 0.3);
+  border-color: #4ecdc4;
+  box-shadow: 0 0 20px rgba(78, 205, 196, 0.3);
+}
+
+.voice-icon {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.voice-name {
+  color: white;
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-bottom: 5px;
+  text-align: center;
+  font-family: "Bangers", system-ui;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.voice-description {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9rem;
+  margin-bottom: 15px;
+  text-align: center;
+  line-height: 1.3;
+}
+
+.voice-test-btn {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+  font-family: "Bangers", system-ui;
+}
+
+.voice-test-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.voice-test-btn:active {
+  transform: scale(0.95);
+}
+
+/* Responsive voice modal */
+@media screen and (max-width: 768px) {
+  .voice-modal {
+    width: 95%;
+    max-height: 85vh;
+  }
+
+  .voice-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .voice-option {
+    padding: 12px;
+  }
+
+  .voice-name {
+    font-size: 1rem;
+  }
+
+  .voice-description {
+    font-size: 0.8rem;
+  }
+}

@@ -304,6 +304,7 @@ class LetterExplosion {
       speechEnabled: localStorage.getItem("speechEnabled") !== "false", // Default true
       darkModeEnabled: localStorage.getItem("darkModeEnabled") === "true", // Default false
       selectedFont: localStorage.getItem("selectedFont") || "Bree Serif", // Default font
+      selectedVoice: localStorage.getItem("selectedVoice") || "auto", // Default auto-select
     };
 
     // Available fonts for selection
@@ -374,6 +375,80 @@ class LetterExplosion {
         name: "Rubik Glitch Pop",
         displayName: "Rubik Glitch Pop",
         category: "Modern",
+      },
+    ];
+
+    // Available voices for text-to-speech with better diversity
+    this.availableVoices = [
+      {
+        name: "auto",
+        displayName: "🎯 Auto-Select Best Voice",
+        description: "Automatically picks the highest quality voice available",
+        searchTerms: ["auto", "best", "default"],
+        voiceIndex: null, // Will be set dynamically
+      },
+      {
+        name: "Samantha",
+        displayName: "👩 Samantha (Female)",
+        description: "Natural female voice - friendly and clear",
+        searchTerms: ["samantha"],
+        voiceIndex: 0,
+      },
+      {
+        name: "Alex",
+        displayName: "👨 Alex (Male)",
+        description: "Natural male voice - warm and expressive",
+        searchTerms: ["alex"],
+        voiceIndex: 1,
+      },
+      {
+        name: "Google US English",
+        displayName: "👩 Google US English",
+        description: "High-quality web-based voice",
+        searchTerms: ["google us english"],
+        voiceIndex: 2,
+      },
+      {
+        name: "Daniel",
+        displayName: "👨 Daniel (Male)",
+        description: "Natural male voice with British accent",
+        searchTerms: ["daniel"],
+        voiceIndex: 3,
+      },
+      {
+        name: "Moira",
+        displayName: "👩 Moira (Female)",
+        description: "Natural female voice with Irish accent",
+        searchTerms: ["moira"],
+        voiceIndex: 4,
+      },
+      {
+        name: "Karen",
+        displayName: "👨 Karen (Male)",
+        description: "Natural male voice - clear and friendly",
+        searchTerms: ["karen"],
+        voiceIndex: 5,
+      },
+      {
+        name: "Tessa",
+        displayName: "👩 Tessa (Female)",
+        description: "Clear female voice with South African accent",
+        searchTerms: ["tessa"],
+        voiceIndex: 6,
+      },
+      {
+        name: "Rishi",
+        displayName: "👨 Rishi (Male)",
+        description: "Natural male voice with Indian accent",
+        searchTerms: ["rishi"],
+        voiceIndex: 7,
+      },
+      {
+        name: "Microsoft Zira",
+        displayName: "🌐 Microsoft Zira",
+        description: "Natural Windows female voice",
+        searchTerms: ["microsoft zira"],
+        voiceIndex: 8,
       },
     ];
 
@@ -900,6 +975,23 @@ class LetterExplosion {
     this.fontMenuItem = fontItem;
     audioSection.appendChild(fontItem);
 
+    // Voice Selection Item
+    const voiceSelectionItem = this.createMenuItem({
+      icon: "🎭",
+      label: "Voice Selection",
+      description: `Current voice: ${
+        this.availableVoices.find((v) => v.name === this.settings.selectedVoice)
+          ?.displayName || "Auto-Select"
+      }. Click to choose from diverse voices including male, female, and different accents!`,
+      onClick: () => {
+        this.openVoiceModal();
+        this.playSound("toggle");
+      },
+    });
+    // Store reference for updating
+    this.voiceMenuItem = voiceSelectionItem;
+    audioSection.appendChild(voiceSelectionItem);
+
     menuPanel.appendChild(audioSection);
 
     // Utilities Section
@@ -1384,6 +1476,134 @@ class LetterExplosion {
     return ["All", ...categories];
   }
 
+  openVoiceModal() {
+    // Create voice selection modal
+    const modal = document.createElement("div");
+    modal.className = "voice-modal-overlay";
+    modal.innerHTML = `
+      <div class="voice-modal">
+        <div class="voice-modal-header">
+          <button class="voice-modal-close">&times;</button>
+        </div>
+        <div class="voice-modal-content">
+          <div class="voice-grid">
+            ${this.availableVoices
+              .map(
+                (voice) => `
+              <div class="voice-option ${
+                voice.name === this.settings.selectedVoice ? "selected" : ""
+              }" 
+                   data-voice="${voice.name}">
+                <div class="voice-icon">${voice.displayName.split(" ")[0]}</div>
+                <div class="voice-name">${voice.displayName}</div>
+                <div class="voice-description">${voice.description}</div>
+                <button class="voice-test-btn" data-voice="${voice.name}">
+                  🔊 Test Voice
+                </button>
+              </div>
+            `
+              )
+              .join("")}
+          </div>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    // Add event listeners
+    modal.querySelector(".voice-modal-close").addEventListener("click", () => {
+      this.closeVoiceModal(modal);
+    });
+
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) {
+        this.closeVoiceModal(modal);
+      }
+    });
+
+    // Voice selection
+    modal.querySelectorAll(".voice-option").forEach((option) => {
+      option.addEventListener("click", (e) => {
+        // Don't trigger selection when clicking test button
+        if (e.target.classList.contains("voice-test-btn")) return;
+
+        const voiceName = option.dataset.voice;
+        this.selectVoice(voiceName);
+        this.closeVoiceModal(modal);
+      });
+    });
+
+    // Test voice buttons
+    modal.querySelectorAll(".voice-test-btn").forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation(); // Prevent option selection
+        const voiceName = btn.dataset.voice;
+        this.testVoice(voiceName);
+      });
+    });
+
+    // Show modal with animation
+    setTimeout(() => modal.classList.add("show"), 10);
+  }
+
+  closeVoiceModal(modal) {
+    modal.classList.remove("show");
+    setTimeout(() => {
+      if (modal.parentNode) {
+        modal.parentNode.removeChild(modal);
+      }
+    }, 300);
+  }
+
+  selectVoice(voiceName) {
+    this.settings.selectedVoice = voiceName;
+    localStorage.setItem("selectedVoice", voiceName);
+
+    // Update menu description
+    if (this.voiceMenuItem) {
+      const selectedVoice = this.availableVoices.find(
+        (v) => v.name === voiceName
+      );
+      const description = this.voiceMenuItem.querySelector(
+        ".menu-item-description"
+      );
+      if (description) {
+        description.textContent = `Current voice: ${
+          selectedVoice?.displayName || "Auto-Select"
+        }. Click to choose from diverse voices including male, female, and different accents!`;
+      }
+    }
+
+    this.playSound("toggle");
+    console.log("🗣️ Voice changed to:", voiceName);
+  }
+
+  testVoice(voiceName) {
+    // Temporarily change voice for testing
+    const originalVoice = this.settings.selectedVoice;
+    this.settings.selectedVoice = voiceName;
+
+    // Test with a fun message
+    const testMessages = [
+      "Hello! I'm your new voice!",
+      "This is how I sound!",
+      "Ready to play the matching game!",
+      "Let's have some fun together!",
+    ];
+    const randomMessage =
+      testMessages[Math.floor(Math.random() * testMessages.length)];
+
+    this.speak(randomMessage);
+
+    // Restore original voice after a short delay
+    setTimeout(() => {
+      this.settings.selectedVoice = originalVoice;
+    }, 2000);
+
+    console.log("🗣️ Testing voice:", voiceName);
+  }
+
   filterFontsByCategory(modal, category) {
     const fontOptions = modal.querySelectorAll(".font-option");
     fontOptions.forEach((option) => {
@@ -1448,7 +1668,7 @@ class LetterExplosion {
 
   // Haptic feedback removed
 
-  // Text-to-speech for messages (kid's voice)
+  // Text-to-speech for messages with improved voice selection
   speak(text) {
     if (!this.settings.speechEnabled) return;
     if (!this.speechSynthesis) return;
@@ -1466,52 +1686,104 @@ class LetterExplosion {
     utterance.rate = 0.95; // Slightly slower = more expressive and clear
     utterance.volume = 0.9; // Good volume
 
-    // Try to select the highest quality, most natural-sounding voice
+    // Try to select voice based on user preference
     const voices = this.speechSynthesis.getVoices();
-
-    // Prioritize premium/natural voices that come with the OS
-    // These tend to sound much more human
-    const preferredVoiceNames = [
-      "Samantha (Enhanced)", // macOS enhanced - very natural
-      "Samantha", // macOS - natural and friendly
-      "Alex", // macOS - very natural male voice
-      "Siri Female", // iOS/macOS Siri voice
-      "Karen", // macOS - warm and friendly
-      "Moira", // macOS - natural Irish accent
-      "Tessa", // macOS - South African, very natural
-      "Google US English", // Chrome - good quality
-      "Microsoft Zira", // Windows - natural
-    ];
-
     let selectedVoice = null;
 
-    // Try to find a preferred voice (exact or partial match)
-    for (const voiceName of preferredVoiceNames) {
-      selectedVoice = voices.find((voice) => voice.name.includes(voiceName));
-      if (selectedVoice) {
-        console.log("🗣️ Selected voice:", selectedVoice.name);
-        break;
-      }
-    }
-
-    // Fallback: prioritize local/premium voices (they sound better)
-    if (!selectedVoice) {
-      selectedVoice = voices.find(
-        (voice) => voice.localService && voice.lang.startsWith("en")
+    if (this.settings.selectedVoice === "auto") {
+      // Auto-select best voice using improved logic
+      selectedVoice = this.findBestAvailableVoice(voices);
+    } else {
+      // Use user-selected voice with better matching
+      selectedVoice = this.findUserSelectedVoice(
+        voices,
+        this.settings.selectedVoice
       );
-    }
 
-    // Fallback: any English voice
-    if (!selectedVoice) {
-      selectedVoice = voices.find((voice) => voice.lang.startsWith("en"));
+      if (!selectedVoice) {
+        console.log("🗣️ Selected voice not found, falling back to auto-select");
+        selectedVoice = this.findBestAvailableVoice(voices);
+      }
     }
 
     if (selectedVoice) {
       utterance.voice = selectedVoice;
+      console.log("🗣️ Using voice:", selectedVoice.name);
     }
 
     this.speechSynthesis.speak(utterance);
     console.log("🗣️ Speaking:", cleanText);
+  }
+
+  // Find the best available voice automatically
+  findBestAvailableVoice(voices) {
+    // Log available voices for debugging
+    console.log(
+      "🗣️ Available voices:",
+      voices.map((v, i) => `${i}: ${v.name}`)
+    );
+
+    // Skip Samantha (index 0) and try to find a different good voice
+    // Start with Alex (index 1) and cycle through to find the best available
+    const voiceIndices = [1, 2, 3, 4, 5, 6, 7, 8, 0]; // Start with index 1, end with 0
+
+    // Try each index to find different voices
+    for (const index of voiceIndices) {
+      if (voices[index]) {
+        console.log("🗣️ Auto-selected voice by index:", voices[index].name);
+        return voices[index];
+      }
+    }
+
+    // Fallback: prioritize local/premium voices (they sound better)
+    const localVoice = voices.find(
+      (voice) => voice.localService && voice.lang.startsWith("en")
+    );
+    if (localVoice) {
+      console.log("🗣️ Auto-selected local voice:", localVoice.name);
+      return localVoice;
+    }
+
+    // Final fallback: any English voice
+    const englishVoice = voices.find((voice) => voice.lang.startsWith("en"));
+    if (englishVoice) {
+      console.log("🗣️ Auto-selected English voice:", englishVoice.name);
+      return englishVoice;
+    }
+
+    return null;
+  }
+
+  // Find user-selected voice with better matching
+  findUserSelectedVoice(voices, selectedVoiceName) {
+    // First try exact match
+    let voice = voices.find((v) => v.name === selectedVoiceName);
+    if (voice) return voice;
+
+    // Then try finding by voice option
+    const voiceOption = this.availableVoices.find(
+      (v) => v.name === selectedVoiceName
+    );
+    if (voiceOption) {
+      // Use voiceIndex for precise matching
+      if (voiceOption.voiceIndex !== null && voices[voiceOption.voiceIndex]) {
+        console.log(
+          "🗣️ Found voice by index:",
+          voices[voiceOption.voiceIndex].name
+        );
+        return voices[voiceOption.voiceIndex];
+      }
+
+      // Fallback: try matching by search terms
+      for (const searchTerm of voiceOption.searchTerms) {
+        voice = voices.find((v) =>
+          v.name.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+        if (voice) return voice;
+      }
+    }
+
+    return null;
   }
 
   // Reset game to initial state
