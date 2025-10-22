@@ -75,7 +75,7 @@ class LetterExplosion {
         "Good Alien!",
         "For My People!",
         "Alien Instincts!",
-        "Alien InsIndependence!",
+        "Alien Independence!",
       ],
       fish: [
         "You reeled that one in!",
@@ -164,8 +164,10 @@ class LetterExplosion {
       brown: [
         "Earthy Excellence!",
         "Chocolate Champion!",
-        "Solid Match!",
+        "Your're a True Fudge-Packer!",
         "Brown and Beautiful!",
+        "Steaming Skidmark!",
+        "Mud Lover!",
       ],
       gray: [
         "Shades of Success!",
@@ -174,10 +176,11 @@ class LetterExplosion {
         "Perfectly Neutral!",
       ],
       black: [
-        "Classic Match!",
-        "Bold and Beautiful!",
+        "Nothingness found!",
+        "Awake and Opaque!",
         "Black Beauty!",
         "Pitch Perfect!",
+        "Dark Destroyer!",
       ],
     };
 
